@@ -1,3 +1,4 @@
+from generator import generate_password
 import tkinter as tk
 from tokenize import Name
 
@@ -19,14 +20,19 @@ enter_button = tk.Button(
     command=lambda:button_click_enter(length_entry.get()))
 enter_button.grid(column=1,row=2)
 
-
 error_text = tk.StringVar()
 password_text = tk.StringVar()
+
 password_label = tk.Label(text=password_text)
+password_label.grid(column=0, row=4)
 error_label = tk.Label(text=error_text)
+error_label.grid(column=0, row=5)
 
 
 def button_click_enter(length):
+    global error_text
+    global password_text
+    
     try: 
         length = int(length)
         
@@ -34,16 +40,12 @@ def button_click_enter(length):
             raise ValueError
     except ValueError:
         if type(length) == int:
-            if length < 7:
-                error_text = "Password has to be at least 8 characters."
-
-                error_label = tk.Label(text=error_text)
+            error_text.set("Password has to be at least 8 characters.")
         else:
-            error_text = "Please enter a valid length of a password."
-        error_label.grid(column=0, row=5)
+            error_text.set("Please enter a valid password.")
         password_label.grid_forget()
     else: 
-        password_label.grid(column=0, row=4)
+        password_text.set(generate_password(length))
         error_label.grid_forget()
     
 app.mainloop()
